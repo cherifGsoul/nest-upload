@@ -1,6 +1,6 @@
 import {Controller, Get, Post, UploadedFile, UseInterceptors} from '@nestjs/common';
 import {FileInterceptor} from '@nestjs/platform-express';
-import {GetSignedURLInputHandler} from "./get-signed-url";
+import {GetSignedURLInputHandler} from './get-signed-url';
 
 @Controller()
 export class AppController {
@@ -14,7 +14,6 @@ export class AppController {
   @Post('file')
   @UseInterceptors(FileInterceptor('file'))
   sign(@UploadedFile() file: Express.Multer.File) {
-    console.log(file);
     return this.getSignedURLInputHandler.handle({
       name: file.filename,
       size: file.size,
