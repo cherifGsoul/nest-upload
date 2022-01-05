@@ -1,14 +1,22 @@
-import {Controller, Get, Post, UploadedFile, UseInterceptors} from '@nestjs/common';
-import {FileInterceptor} from '@nestjs/platform-express';
-import {GetSignedURLInputHandler} from './get-signed-url';
+import {
+  Controller,
+  Get,
+  Post,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { GetSignedURLInputHandler } from './get-signed-url';
 
 @Controller()
 export class AppController {
-  constructor(private readonly getSignedURLInputHandler: GetSignedURLInputHandler) {}
+  constructor(
+    private readonly getSignedURLInputHandler: GetSignedURLInputHandler,
+  ) {}
 
   @Get('/')
   index() {
-    return 'Hello from nest'
+    return 'Hello from nest';
   }
 
   @Post('file')
@@ -17,7 +25,7 @@ export class AppController {
     return this.getSignedURLInputHandler.handle({
       name: file.filename,
       size: file.size,
-      mimeType: file.mimetype
-    })
+      mimeType: file.mimetype,
+    });
   }
 }

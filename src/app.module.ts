@@ -1,17 +1,22 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
-import {FakeStorageService, GetSignedURLInputHandler} from './get-signed-url';
-
-const getSignedURLInputHandlerFactory = {
-  provide: GetSignedURLInputHandler,
-  useFactory: () => {
-    return new GetSignedURLInputHandler(new FakeStorageService('my-storage.com'))
-  }
-};
+import { GetSignedURLInputHandler } from './get-signed-url';
+import { ServiceContainer } from './service-container';
 
 @Module({
   imports: [],
   controllers: [AppController],
-  providers: [getSignedURLInputHandlerFactory],
+  providers: [
+    {
+      provide: ServiceContainer,
+      useFactory: () => new ServiceContainer('my-storage.com'),
+    },
+    {
+      provide: GetSignedURLInputHandler,
+      useFactory: (serviceContainer: ServiceContainer) =>
+        serviceContainer.signedUrlHandler,
+      inject: [ServiceContainer],
+    },
+  ],
 })
 export class AppModule {}
